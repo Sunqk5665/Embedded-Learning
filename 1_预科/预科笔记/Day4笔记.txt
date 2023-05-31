@@ -1,0 +1,319 @@
+【数据库】
+	数据库是用于持久化存储数据的软件，数据库本质上是把程序中的
+数据保存到计算机硬盘中，在需要的使用可以对数据进行新增、删除、修改、查询。
+
+	数据库产品非常多，常见的有两类：
+	（1）关系型数据库：行与列的格式，例如Excel表格的形式。
+	常见的是SQLite、MySQL、SQLServer、Oracle、DB2......
+	（2）非关系型数据库：使用JSON格式。
+	常见的有MongoDB。
+
+	嵌入式最常用的数据库是SQLite，SQLite是一种轻量级的关系型数据库，本体
+只有几兆大小。SQLite常见的数据操作都有，但是由于本体较小，相比其它数据库：
+	（1）语法结构不严格
+	（2）在很多系统或软件框架中自带
+	（3）主要进行本体数据库存储和管理，不太擅长高并发的服务器系统
+
+	本次学习主要使用两个文件：
+	（1）scott.db
+	.db或.db3格式是SQLite数据库的格式，scott.db内部存储的是本次的学习数据。
+	（2）SQLiteSpy.exe
+	这是一个免安装直接打开就能使用的SQLite操作软件，内置了SQLite数据库。
+
+	使用SQLiteSpy打开学习数据的操作步骤如下：
+	1、双击打开SQLiteSpy软件
+	2、在软件中点击File，点击Open Database
+	3、在弹出的窗口中选中scott.db就可也以打开学习数据了
+
+	在SQLite中，.db文件是数据库文件，这个文件可以认为等效于.xlsx表格文件。
+在Excel中，点击下方的标签，切换一个又一个的表（Sheet），在数据库中使用表（Table）
+来表示相同含义。
+
+	为了统一不同的数据库产品的操作方式，IBM公司在上世纪70年代发明了SQL语言，
+SQL语言已经成为关系型数据库的通用操作语言。
+	SQL语言分为三类：
+	（1）数据操作语言 DML
+		[1] 数据查询语言 DQL
+			预科学习重点，通过各种条件的限制，筛选和整理出需要数据。
+		[2] 更新操作
+			包括对数据的增删改，网络编程与Qt等课程中学习。
+	（2）数据定义语言 DDL
+	定义数据库格式，常见于设计数据库表，一般由软件架构师负责。
+	（3）数据控制语言 DCL
+	用于操作数据库账户的控制权限，一般由数据库管理员负责，我们不学。
+
+【scott.db中的四张表】
+	包含了emp、dept、salgrade和bonus四张表。
+1. emp 雇员表
+	包含了一个公司内部所有雇员的信息，在SQLiteSqy中双击表名打开表中的内容。
+	表中每一个列（字段）中存储的数据类型都是相同的，emp表中包含以下数据格式：
+	（1）INTEGER：整数类型，例如empno、mgr、sal、comm等。
+	（2）TEXT 文本（字符串）类型，例如ename、job、hiredate(固定格式的文字)	
+	请记住表名与每一列（字段）的英汉互译。
+2. dept 部门表
+	包含了一个公司所有部门的信息。
+	请记住表名与每一列（字段）的英汉互译。
+3. salgrade 工资等级表
+	包含了一个公司的工资等级信息。
+	请记住表名与每一列的英汉互译。
+4. bonus 奖金表
+	用于显示一个空表的效果，知道空表什么样子就可以了。
+
+【简单查询】
+	简单查询的结果包含所有的行（记录），依次展示每条数据，但是可以
+控制显示哪些列（字段）。
+	注意，每次都会先讲解语法结构，留个印象。
+	[]表示可选填内容
+	|表示或者
+	*表示全查
+	DISTINCT表示去掉重复行
+
+例子：查询emp表中的所有内容，相当于在SQLiteSpy中双击表名。
+SELECT * FROM emp;
+在SQLiteSpy中填写上述语句，点击键盘F9或依次鼠标点击Execute---Execute SQL
+
+SQL语句的编写建议使用Notepad++软件，切换到SQL语言模式。
+切换方法1：点击语言---S---SQL，即可切换语言模式。
+切换方法2：新建一个文本文档，格式改为.sql，使用Notepad++打开。
+
+例子：查询所有雇员的编号（empno）、姓名（ename）、职位（job）、基本工资（sal）。
+SELECT empno,ename,job,sal
+FROM emp;
+
+课堂练习：查询每个雇员的编号、姓名和基本年薪（基本工资x12）
+SELECT empno,ename,sal*12 FROM emp;
+也可以给每个列起别名
+SELECT empno,ename,sal*12 年薪 FROM emp;
+给列起别名（特别是中文别名）后期用的不算多，也不建议使用中文。
+
+课堂练习：
+	查询每个雇员的编号、姓名、职位、年薪，每个月有200元的餐补，
+有200元的交通补助，夏天每个月有300元的高温补贴，年底奖金3个月
+薪资。
+SELECT empno,ename,job,sal*15+12*(200+200)+3*300 income 
+FROM emp;
+
+例子：查询公司的职位有哪些？
+SELECT job FROM emp;
+-- 增加DISTINCT关键字可以消除重复项
+SELECT DISTINCT job FROM emp;
+-- 需要注意的是，重复项指的是每一列的数据都相同。
+
+【限定查询】
+在简单查询的基础上限制结果的行数，就是限定查询。
+限定查询主要通过WHERE子句完成，支持六种运算：
+关系运算、取值范围运算、基数范围运算、模糊查询、空判断、逻辑运算
+
+1. 关系运算
+关系运算是最简单的运算符号，包括：
+>  			大于
+< 			小于
+>= 			大于等于
+<= 			小于等于
+!= <> 		不等于
+== =		等于
+
+例子：查询薪金在2000以上的雇员信息。
+SELECT * FROM emp WHERE sal>2000;
+
+课堂练习：
+(1) 查询基本工资小于1600的雇员信息。
+SELECT *
+FROM emp
+WHERE sal<1600;
+(2) 查询姓名是SMITH的雇员信息。
+SELECT * FROM emp WHERE ename='SMITH';
+(3) 查询职位不是销售的雇员信息。
+SELECT *
+FROM emp
+WHERE job!="SALESMAN";
+
+2. 取值范围运算
+使用BETWEEN a AND b表示一个[a,b]的闭区间。
+
+例子：查询工资在1000-2000区间的雇员信息。
+SELECT *
+FROM emp
+WHERE sal BETWEEN 1000 AND 2000;
+
+例子：查询在1981年雇佣的雇员信息。
+分析：雇佣日期在1981年1月1日到1981年12月31日。
+时间和日期一定要按照标准格式的字符串编写。
+SELECT *
+FROM emp
+WHERE hiredate BETWEEN '1981-01-01' AND '1981-12-31';
+
+课堂练习：
+	查询员工编号在7500-7800之间的雇员信息。
+SELECT *
+FROM emp
+WHERE empno BETWEEN 7500 AND 7800;
+
+3. 基数范围运算
+数据在几个可选的选项中存在，使用IN操作完成。
+
+例子：查询出雇员编号为7369、7566、7839和8899（不存在）的雇员。
+SELECT *
+FROM emp
+WHERE empno IN (7369,7566,7839,8899);
+
+例子：查询出雇员编号不为7369、7566、7839和8899（不存在）的雇员。
+-- NOT是取反
+SELECT *
+FROM emp
+WHERE empno NOT IN (7369,7566,7839,8899);
+
+课堂练习：
+	查询出公司的柜员（CLERK）和销售（SALESMAN）的信息。
+SELECT * FROM emp WHERE job IN ('CLERK','SALESMAN');
+
+IN不能与NULL一起使用，一起使用没有任何效果。
+
+4. 模糊查询
+模糊查询可以只通过部分内容查询所完成的数据，使用LIKE配合两个标记符：
+_			匹配任意一个字符
+%			匹配任意多个（0,1,...n）字符
+
+例子：查询所有姓名以字母A开头的雇员信息。
+SELECT *
+FROM emp
+WHERE ename LIKE 'A%';
+
+课堂练习：
+（1） 查询姓名第二个字母是A的雇员信息。
+SELECT * FROM emp WHERE ename LIKE "_A%";
+
+（2） 查询姓名中包含字母A的雇员信息。
+SELECT * FROM emp WHERE ename LIKE "%A%";
+
+5. 空判断
+NULL是一种特殊的数据状态，表示无内容。
+
+例子：查询不领取佣金的雇员信息。
+-- 错误的写法：NULL不能使用关系运算符判断
+SELECT *
+FROM emp
+WHERE comm=NULL;
+
+使用IS NULL来判断一个数据是否为空。
+使用IS NOT NULL或者NOT IS NULL判断非空。
+
+-- 上面的例子的正确写法
+SELECT *
+FROM emp
+WHERE comm IS NULL;
+
+例子：查询领取佣金的雇员信息。
+SELECT *
+FROM emp
+WHERE comm IS NOT NULL;
+
+SELECT *
+FROM emp
+WHERE NOT comm IS NULL;
+
+6. 逻辑运算
+与 AND：所有条件都满足，结果才满足。
+或 OR：所有的条件满足一个，结果就满足。
+非 NOT：反转结果
+
+例子:查询出工资高于1300的销售人员信息。
+分析：要同时满足两个筛选条件 sal>1300 job='SALESMAN'
+SELECT *
+FROM emp
+WHERE sal>1300 AND job='SALESMAN';
+
+例子：
+	查询出公司的柜员（CLERK）和销售（SALESMAN）的信息。
+SELECT *
+FROM emp
+WHERE job='CLERK' OR job='SALESMAN';
+
+课堂练习：
+（1）查询出工资范围不在1200-1300区间的雇员信息。
+SELECT *
+FROM emp
+WHERE sal NOT BETWEEN 1200 AND 1300;
+
+（2）查询出10部门的经理信息。
+SELECT *
+FROM emp
+WHERE job='MANAGER' AND deptno=10;
+
+（3）查询出工资高于3000或者职位是柜员的雇员信息。
+SELECT * FROM emp WHERE sal>3000 OR job=='CLARK';
+
+（4）查询出所有职位不是柜员的雇员信息。
+SELECT * 
+FROM emp 
+WHERE NOT job='CLERK';
+
+【查询排序】
+	可以制定一列或多列按照升序或降序的顺序排序。
+使用ORDER BY子句配合两种排序方式的关键字：
+ASC 		升序
+DESC		降序
+
+例子：查询所有雇员的信息，按照工资降序排布。
+SELECT *
+FROM emp
+ORDER BY sal DESC;
+
+例子：
+	查询所有雇员的信息，按照工资降序排布。如果工资相同，
+则按照雇佣日期从早到晚排布。
+SELECT *
+FROM emp
+ORDER BY sal DESC,hiredate ASC;
+
+课堂练习：
+	查询所有雇员的信息，按照年薪排序，年薪越高的越靠前。
+SELECT *
+FROM emp
+ORDER BY sal*12 DESC;
+
+【今晚作业】
+1. 记住三张表（emp、dept和salgrade）表的内容，包括表名和列名的英汉互译。
+2. 完成以下查询语句。
+（1）查询部门30的雇员信息。
+SELECT * FROM emp WHERE deptno==30;
+（2）查询所有柜员的姓名、编号和部门编号。
+SELECT ename 姓名,empno 编号,deptno 部门编号
+FROM emp
+WHERE job=='CLERK';
+（3）查询出部门30的所有经理和部门20中所有柜员的信息。
+SELECT *
+FROM emp 
+WHERE (deptno=30 AND job='MANAGER') OR (deptno=20 AND job='CLERK');
+（4）查询出部门30中所有经理、部门20中所有柜员以及既不是经理又不是柜员的雇员信息。
+SELECT *
+FROM emp 
+WHERE deptno=30 AND job='MANAGER' OR deptno=20 AND job='CLERK' OR job!='MANAGER' AND job!='CLERK';
+WHERE deptno=30 AND job='MANAGER' OR deptno=20 AND job='CLERK' OR job NOT IN ('MANAGE','CLEAR');
+（5）找到不收取佣金或佣金低于100的雇员姓名。
+SELECT ename 姓名
+FROM emp
+WHERE  comm is NULL OR comm<100;
+（6）查询姓名不包含字母A的雇员姓名与编号。
+SELECT ename 姓名,empno 编号
+FROM emp
+WHERE ename NOT LIKE '%A%';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+

@@ -1,0 +1,26 @@
+（1）查询公司工资等级3以上（包含3）的雇员编号和姓名。
+SELECT empno,ename
+FROM emp,salgrade
+WHERE sal BETWEEN losal AND salgrade.hisal AND grade>=3;
+
+（2）查询公司所有雇员的姓名、编号、雇佣年份和部门名称。
+SELECT ename,empno,hiredate,dname
+FROM emp,dept
+WHERE emp.deptno=dept.deptno;
+
+（3）查询所有雇员的雇佣时长（单位年）。
+SELECT ename,DATETIME('now','localtime')-STRFTIME('%Y',hiredate)
+FROM emp;
+
+
+（4）查询所有在12月雇佣的雇员姓名、编号、月薪（包括佣金）。
+SELECT ename,empno,sal+IFNULL(comm,0)
+FROM emp,salgrade
+WHERE STRFTIME('%m',hiredate)='12';
+
+（5）查询所有非经理的雇员姓名、编号、部门编号、月薪（包括佣金），按照月薪降序排布。
+周二晚上10点之前提交。
+
+SELECT ename,empno,deptno,sal+IFNULL(comm,0)
+FROM emp
+WHERE job!='MANAGER' ORDER BY sal DESC;
