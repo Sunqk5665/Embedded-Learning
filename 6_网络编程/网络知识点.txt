@@ -1,0 +1,55 @@
+【0】复习
+   了解历史：
+      早前阿帕网特点：没有纠错功能、不能互联不同主机和不同操作系统
+	  TCP/IP ：TCP   IP
+	  
+	广域网：链接外网
+	局域网：内网通信 
+	
+	ip：标识主机
+	   ip=网络号+主机号
+	   A: 0  1byte网络  3byte主机
+	   B：10  2byte网络  2byte主机
+	   C：110 3byte网络  1byte主机
+	   
+	port端口：标识进程
+	 
+	1-1023
+	1024-49151
+	
+	OSI    TCP/IP	
+
+	socket：
+	
+	套接字：
+	   流式-TCP、数据报-UDP、原始
+	
+    大小端：
+     pc-小端
+     网络字节序：大端	 
+	
+	TCP通信流程：
+	   服务器：
+	      1.创建套接字 socket
+	int sockfd=socket(通信方式,套接字类型,0-自动匹配底层);
+		  2.绑定  bind
+		  ipv4-struct sockaddr_in saddr;
+		     saddr.sin_family=AF_INET;
+			 saddr.sin_port=htons(端口);
+			 saddr.sin_addr.s_addr=inet_addr("ip");
+		  bind(sockfd,(struct sockaddr *)&saddr,sizeof(saddr));
+		  3.监听  listen
+		  listen(sockfd,5);
+		  4.阻塞等待客户端链接  accept
+		  int acceptfd=accept(sockfd,NULL,NULL);
+		  5.接受消息   recv/send
+		   recv(acceptfd,buf,sizeof(buf),0-阻塞);  
+		  6.关闭套接字  close
+	  客户端：
+	     1.创建套接字
+		   填充服务的结构体
+		 2.请求链接服务器 connect
+		 connect(sockfd,(struct sockaddr *)&saddr,sizeof(saddr));
+		 3.发送接收消息  send
+		  send(sockfd,buf,sizeof(buf),0-阻塞);  
+		 4.关闭套接字
