@@ -1,0 +1,52 @@
+select:
+poll:
+	1、创建数组
+	struct pollfd fds[100] = {};
+	2、将关心的文件描述符添加到pollfd结构体中
+	last = -1;
+	fds[++last].fd = 0;
+	fds[last].events = POLLIN;
+	
+	fds[++last].fd = sockfd;
+    fds[last].events = POLLIN;
+	3、调用函数Poll
+	while(1)
+	{
+		int ret = poll(fds, last + 1, -1);
+        if (ret < 0)
+        {
+            perror("poll err.");
+            return -1;
+        }
+		4、函数返回
+		5、判断
+		for(int i=0;i<=last;i++)
+		{
+			//判断当前结构体数组成员的revents是否是读事件(POLLIN)
+			if (fds[i].revents == POLLIN)
+			{
+				if (fds[i].fd == 0)
+				{
+					fgets();
+					printf();
+					for(int j=2;i<=last;j++)
+					{
+						send(fds[j].fd,buf,sizeof(buf),0);
+					}
+				}
+				else if (fds[i].fd == sockfd)
+				{
+					acceptfd = accept();
+				}
+				else
+				{
+					recvbyte = recv(fds[i].fd,...);
+					if(recvbyte == 0)
+					{
+						
+					}
+				}
+			}
+		}
+	}
+epoll:
