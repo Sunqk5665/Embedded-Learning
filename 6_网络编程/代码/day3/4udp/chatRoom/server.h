@@ -10,14 +10,14 @@
 #include <unistd.h>
 #include <string.h>
 
-//链表节点结构体,存放客户端的通信结构体
+//定义链表节点结构体,用来存放客户端的通信结构体
 typedef struct node
 {
-    struct sockaddr_in addr; //data   memcmp
+    struct sockaddr_in addr;
     struct node *next;
 } link_node;
 
-//消息对应的结构体(同一个协议)
+//消息对应的结构体(保证客户端服务端同一个协议)
 typedef struct msg_t
 {
     int type;       //L C  Q    enum un{login,chat,quit};
@@ -25,6 +25,7 @@ typedef struct msg_t
     char text[128]; //消息正文
 } MSG_t;
 
+//枚举，表示“登录、聊天、退出”
 enum un
 {
     login,
