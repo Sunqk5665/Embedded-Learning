@@ -1,0 +1,24 @@
+1、解压源码
+# tar xvf sqlite-autoconf-3081002.tar.gz
+
+2、进到源码目录并定制Makefile
+# cd sqlite-autoconf-3081002
+
+# ./configure --prefix=$PWD/build --host=arm-linux CC=/opt/arm-linux-gcc-4.6.4/bin/arm-linux-gcc
+OR
+# ./configure --prefix=$PWD/build --host=i386-linux
+
+说明
+--prefix： 指定安装路径
+--host：指定主机编译环境
+	arm-linux是指ARM交叉编译
+	i386-linux是指x86系统
+CC：指定编译器
+	如果--host是arm-linux则需要交叉编译工具链
+	如果--host是i386-linux则不需要指定编译器，而使用系统默认的gcc
+
+3、编译
+# make 
+
+安装
+# make install

@@ -1,0 +1,14 @@
+https://blog.csdn.net/qishang_62/article/details/79364641
+
+
+1、设置能够上网
+
+2、更新更新源
+# apt-get update
+
+3、安装软件及开发环境
+# apt-get install sqlite3		--->sqlite3数据库软件
+# apt-get install libsqlite3-dev	--->sqlite3数据库开发支持库
+# apt-get install sqlite3-doc		--->sqlite3数据库说明文档
+--------------------------------
+# apt-get install sqlitebrowser		--->sqlite3数据库操作软件

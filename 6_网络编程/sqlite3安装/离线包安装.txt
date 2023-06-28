@@ -1,0 +1,7 @@
+离线deb包安装命令说明
+dpkg -i deb包文件名
+
+示例：
+#dpkg -i sqlite3_3.7.2-1ubuntu0.1_i386.deb
+#dpkg -i libsqlite3-0_3.7.2-1ubuntu0.1_i386.deb
+#dpkg -i libsqlite3-dev_3.7.2-1ubuntu0.1_i386.deb
