@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>自定义JSON格式POST请求</title>
+	</head>
+	<body>
+
+		<button onclick="sendPOSTRequest()">发送JSON请求</button>
+
+		<script>
+			function sendPOSTRequest() {
+				var xhr = new XMLHttpRequest(); // 创建XMLHttpRequest对象
+				var url = ""; // 请求的URL
+
+				xhr.open("POST", url, true); // 配置请求：POST方法、URL、异步请求
+
+				var data = {
+					name: "John",
+					age: 30
+				};
+
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState === 4 && xhr.status === 200) { // 请求完成且成功
+						var response = xhr.responseText; // 获取响应数据
+						var obj = JSON.parse(response)  //将json字符串反序列化为json对象
+						console.log(obj); // 在浏览器控制台打印响应数据
+						console.log(obj.message); // 可以直接打印某个json对象的成员
+					}
+				};
+				
+				//将json对象序列化为json字符串
+				xhr.send(JSON.stringify(data)); // 发送请求，并将数据转换为JSON字符串
+			}
+		</script>
+
+	</body>
+</html>

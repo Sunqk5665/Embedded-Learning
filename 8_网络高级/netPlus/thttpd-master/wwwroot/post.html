@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>自定义POST请求示例</title>
+		<script>
+			function sendPOSTRequest() {
+				var xhr = new XMLHttpRequest(); // 创建XMLHttpRequest对象
+				var url = ""; // 请求的URL，这个可以不写
+
+				data = "data1=" + document.getElementById("data1").value + "data2=" + document.getElementById("data2").value;
+				console.log("req = " + data);
+
+				xhr.open("POST", url, true); // 配置请求：POST方法、URL、异步请求
+
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState === 4 && xhr.status === 200) { // 请求完成且成功
+						var response = xhr.responseText; // 获取响应数据
+						console.log("resp = " + response);
+						document.getElementById("sum").value = response;
+					}
+				};
+
+				xhr.send(JSON.stringify(data)); // 发送请求，并将数据转换为JSON字符串
+			}
+		</script>
+	</head>
+	<body>
+		data1: <input type="text" id="data1" value="1"><br />
+		data2: <input type="text" id="data2" value="2"><br />
+		相乘: <input type="text" id="sum" placeholder="这里显示和"><br />
+		<br />
+		<button onclick="sendPOSTRequest()">相乘</button>
+	</body>
+</html>
