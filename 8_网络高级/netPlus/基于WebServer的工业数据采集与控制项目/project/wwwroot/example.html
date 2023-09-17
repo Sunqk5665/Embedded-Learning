@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的网页</title>
+    <script>
+        function fun(obj)
+        {
+            if(obj=="man")
+            {
+                console.log("I am man");
+            }
+            else
+            {
+                console.log("I am woman");
+            }
+        }
+        function get_info()
+        {
+            var v = document.getElementsByName("username");
+            // v[0].value = "hello";
+            var xhr = new XMLHttpRequest();//创建对象
+
+            var url = "";
+
+            xhr.open("post",url,true);
+            //事件
+            xhr.onreadystatechange = function()
+            {
+                //判断是不是4,并且状态码是200
+                if(xhr.readyState == 4 && xhr.status == 200)//请求完成且成功
+                {
+                    v[0].value=xhr.responseText;//响应正文
+                    console.log(xhr.responseText);
+                }
+            }
+            xhr.send("\"modbus_get\""); //发送请求
+        }
+    </script>
+</head>
+
+<body>
+    <!--换行标签-->
+    hello<br>world!
+    <!--标题标签-->
+    <h1>一级标签</h1>
+    <!--块标签-->
+    <div style="color: rgb(10, 117, 240);background-color: bisque">
+        <h2>二级标签</h2>
+        <p>
+            HTML（英文Hyper Text Markup Language的缩写）中文译为“超文本标记语言”。是用来描述网页的一种语言。
+            所谓超文本，因为它可以加入图片、声音、动画、多媒体等内容，不仅如此，它还可以从一个文件跳转到另一个文件，与世界各地主机的文件连接。
+            HTML 不是一种编程语言，而是一种标记语言 (markup language)
+            Web 浏览器的作用是读取 HTML 文档，并以网页的形式显示出它们。浏览器不会显示 HTML 标签，而是使用标签来解释页面的内容
+
+        </p>
+        <!--段落标签-->
+    </div>
+    <!--input标签-->
+    用户名：
+    <input type="text" name="username" value="admin">
+    刷新：<input type="button" name="flash" onclick="get_info()">
+    <br>
+    <!--input类型为radio表示单选框，表示同一类型的单选框name必须相同-->
+    <!--checked表示默认选中-->
+    性&nbsp;&nbsp;别：
+    男：
+    <input type="radio" name="sex" id="man" checked="checked" onclick="fun(id)" >
+    女：
+    <input type="radio" name="sex" id="woman" onclick="fun(id)">
+</body>
+
+</html>
